@@ -20,12 +20,12 @@ if uploaded_file is not None:
     graph_type = st.radio("Do you want to plot a graph with a single column or multiple columns?", ('Single Column', 'Multiple Columns'))
 
     def plot_bar_chart(counts, title, x_label):
-        # Define colors for each category
-        colors = ['green', 'blue', 'orange']  # Yes -> Green, No -> Blue, Other -> Orange
+        # Define new colors for each bar
+        colors = ['#ff9999', '#66b3ff', '#99ff99', '#ffcc99', '#c2c2f0']  # Custom colors for variety
         
         # Plot the bar chart
-        plt.figure(figsize=(10, 6))
-        bars = plt.bar(counts.index, counts.values, color=colors)
+        plt.figure(figsize=(12, 6))
+        bars = plt.bar(counts.index, counts.values, color=colors[:len(counts.index)])
 
         # Add count labels on top of each bar
         for bar in bars:
@@ -53,20 +53,37 @@ if uploaded_file is not None:
         selected_columns = st.multiselect("Select columns to include in the plot", df.columns)
         
         if st.button("Generate Plot"):
-            # Initialize a dictionary to hold the counts for each category across all selected columns
-            combined_counts = {'Yes': 0, 'No': 0, 'Other': 0}
+            # Initialize a dictionary to hold the counts for each column
+            column_counts = {}
 
             for col in selected_columns:
-                counts = df[col].apply(lambda x: 'Yes' if x == 1 else ('No' if x == 0 else 'Other')).value_counts()
-                for category in ['Yes', 'No', 'Other']:
-                    combined_counts[category] += counts.get(category, 0)
+                # Count the number of 1s in the column
+                count_ones = (df[col] == 1).sum()
+                # Use the column name as the key
+                column_counts[col] = count_ones
 
-            # Convert combined_counts to a pandas Series to plot
-            counts_series = pd.Series(combined_counts)
+            # Convert column_counts to a pandas Series to plot
+            counts_series = pd.Series(column_counts)
 
             # Plot the graph with customizations
-            plot_bar_chart(counts_series, 'Combined Distribution of Values in Selected Columns', 'Categories')
+            plt.figure(figsize=(12, 6))
+            bars = plt.bar(counts_series.index, counts_series.values, color=['#ff9999', '#66b3ff', '#99ff99', '#ffcc99', '#c2c2f0'][:len(counts_series.index)])
+
+            # Add count labels on top of each bar
+            for bar in bars:
+                yval = bar.get_height()
+                plt.text(bar.get_x() + bar.get_width()/2, yval, int(yval), ha='center', va='bottom')
+
+            plt.xlabel('Columns')
+            plt.ylabel('Count of 1s')
+            plt.title('Count of 1s in Selected Columns')
+
+            # Split column names by '/' and use the part after '/'
+            new_labels = [name.split('/')[-1] for name in counts_series.index]
+            plt.xticks(ticks=range(len(new_labels)), labels=new_labels, rotation=45)
+
+            st.pyplot(plt)
+            st.subheader("Created by Utkarsh Shukla")
 
 else:
     st.write("Waiting for file to upload...")
-st.subheader("              Created by Utkarsh Shukla")
