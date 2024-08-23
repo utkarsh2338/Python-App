@@ -23,7 +23,7 @@ jsonschema-specifications==2023.12.1
 kiwisolver==1.4.5
 markdown-it-py==3.0.0
 MarkupSafe==2.1.5
-matplotlib==3.7.2
+matplotlib==3.6.0
 mdurl==0.1.2
 narwhals==1.4.2
 numpy==1.26.4
@@ -35,8 +35,7 @@ pyarrow==17.0.0
 pydeck==0.9.1
 Pygments==2.18.0
 pyjokes==0.6.0
-pyparsing==3.1.2
-pypiwin32==223
+pyparsing==2.3.1
 python-dateutil==2.9.0.post0
 pyttsx3==2.90
 pytz==2024.1
