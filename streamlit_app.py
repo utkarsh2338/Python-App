@@ -69,4 +69,4 @@ if uploaded_file is not None:
 
 else:
     st.write("Waiting for file to upload...")
-st.subheader("\t\t\t\tCreated by Utkarsh Shukla")
+st.subheader("              Created by Utkarsh Shukla")
